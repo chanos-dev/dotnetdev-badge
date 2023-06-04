@@ -2,8 +2,8 @@
 {
     internal enum ETheme
     {
-        White,
-        Black,
+        Light,
+        Dark,
         Dotnet,
     } 
 }

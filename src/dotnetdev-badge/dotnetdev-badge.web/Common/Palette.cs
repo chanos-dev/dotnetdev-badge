@@ -8,8 +8,8 @@
         {
             _colorSets = new()
             {
-                { ETheme.White, new ColorSet("222222", "FFFFFF") },
-                { ETheme.Black, new ColorSet("FFFFFF", "222222") },
+                { ETheme.Light, new ColorSet("222222", "FFFFFF") },
+                { ETheme.Dark, new ColorSet("FFFFFF", "222222") },
                 { ETheme.Dotnet, new ColorSet("FFFFFF", "6E20A0") },
             };
         }
@@ -31,7 +31,7 @@
         internal string FontColor { get; private set; }
         internal string BackgroundColor { get; private set; }
 
-        public ColorSet(string fontColor, string backgroundColor)
+        internal ColorSet(string fontColor, string backgroundColor)
         {
             FontColor = fontColor;
             BackgroundColor = backgroundColor;

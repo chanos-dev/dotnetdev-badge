@@ -1,4 +1,5 @@
 ﻿using DotNetDevBadgeWeb.Common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace DotNetDevBadgeWeb.Core
@@ -22,16 +23,16 @@ namespace DotNetDevBadgeWeb.Core
             using HttpResponseMessage response = await client.GetAsync(uri, token);
 
             return await response.Content.ReadAsStringAsync(token);
-        }
+        } 
 
         public async Task<string> GetMicroBadge(string id, ETheme theme, CancellationToken token)
         {
             Uri uri = new(string.Format(SUMMARY_URL, id));
             string data = await GetDataAsync(uri, token);
-            JObject obj = JObject.Parse(data);
+            JObject json = JObject.Parse(data); 
 
-            string received = obj["user_summary"]?["likes_received"]?.ToString() ?? "0";
-            string trustLv = obj["users"]?.Where(t => t["id"]?.ToString() != "-1").FirstOrDefault()?["trust_level"]?.ToString() ?? string.Empty;
+            string received = json["user_summary"]?["likes_received"]?.ToString() ?? "0";
+            string trustLv = json["users"]?.Where(t => t["id"]?.ToString() != "-1").FirstOrDefault()?["trust_level"]?.ToString() ?? string.Empty;
 
             ColorSet colorSet = Palette.GetColorSet(theme);
             string trustColor =  Palette.GetTrustColor(trustLv);
@@ -60,7 +61,7 @@ namespace DotNetDevBadgeWeb.Core
             d=""M37.0711 4.79317C37.5874 4.7052 38.1168 4.73422 38.6204 4.87808C39.124 5.02195 39.5888 5.27699 39.9807 5.62442L40.0023 5.64367L40.0222 5.62617C40.3962 5.29792 40.8359 5.05321 41.312 4.90836C41.7881 4.76352 42.2896 4.72186 42.7831 4.78617L42.9266 4.80717C43.5486 4.91456 44.13 5.18817 44.6092 5.59902C45.0884 6.00987 45.4476 6.54267 45.6487 7.14099C45.8498 7.73931 45.8853 8.38088 45.7516 8.99776C45.6178 9.61464 45.3198 10.1839 44.8889 10.6452L44.7839 10.7531L44.7559 10.777L40.4101 15.0814C40.3098 15.1807 40.1769 15.2402 40.0361 15.249C39.8953 15.2578 39.756 15.2153 39.6442 15.1292L39.5893 15.0814L35.2184 10.7519C34.7554 10.3014 34.4261 9.73148 34.267 9.10532C34.1079 8.47917 34.1252 7.82119 34.317 7.20427C34.5088 6.58734 34.8676 6.03555 35.3537 5.60999C35.8398 5.18443 36.4342 4.90172 37.0711 4.79317Z""
             fill=""#FA6C8D"" />
     </g> 
-    <text class=""text"" x=""52"" y=""14.5"" >{received}</text>  
+    <text class=""text"" x=""49"" y=""14.5"" >{received}</text>  
     <rect x=""88"" y=""1"" width=""18"" height=""18"" fill=""url(#pattern0)"" />
     <defs>
         <pattern id=""pattern0"" patternContentUnits=""objectBoundingBox"" width=""1"" height=""1"">
@@ -74,9 +75,28 @@ namespace DotNetDevBadgeWeb.Core
             return svg;
         }
 
-        public Task<string> GetLargeBadge(string id, ETheme theme, CancellationToken token)
+        public async Task<string> GetLargeBadge(string id, ETheme theme, CancellationToken token)
         {
-            throw new NotImplementedException();
+            Uri badgeUri = new(string.Format(BADGE_URL, id));
+            string badgeData = await GetDataAsync(badgeUri, token);
+            JObject badgeJson = JObject.Parse(badgeData);
+
+            var badges = badgeJson["badges"]?.GroupBy(badge => badge["badge_type_id"]?.ToString() ?? string.Empty).Select(g => new
+            {
+                Type = g.Key,
+                Count = g.Count(),
+            });
+
+            Uri summaryUri = new(string.Format(SUMMARY_URL, id));
+            string summaryData = await GetDataAsync(summaryUri, token);
+            JObject summaryJson = JObject.Parse(summaryData);
+
+            // todo..
+
+            string svg = $@"
+";
+
+            return svg;
         } 
     }
 }
