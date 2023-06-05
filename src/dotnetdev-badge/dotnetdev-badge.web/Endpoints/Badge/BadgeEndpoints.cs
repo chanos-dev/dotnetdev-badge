@@ -14,15 +14,15 @@ namespace DotNetDevBadgeWeb.Endpoints.BadgeEndPoints
 
         internal static WebApplication MapBadgeEndpointsV1(this WebApplication app)
         {
-            app.MapGet("/api/v1/badge/micro", async ([FromQuery] string id, [FromQuery] ETheme? theme, IBadge badge, CancellationToken token) =>
+            app.MapGet("/api/v1/badge/small", async ([FromQuery] string id, [FromQuery] ETheme? theme, IBadgeV1 badge, CancellationToken token) =>
             {
-                string response = await badge.GetMicroBadge(id, theme ?? ETheme.Light, token);
+                string response = await badge.GetSmallBadge(id, theme ?? ETheme.Light, token);
                 return Results.Content(response, "image/svg+xml");
             });
 
-            app.MapGet("/api/v1/badge/large", async ([FromQuery] string id, [FromQuery] ETheme? theme, IBadge badge, CancellationToken token) =>
+            app.MapGet("/api/v1/badge/medium", async ([FromQuery] string id, [FromQuery] ETheme? theme, IBadgeV1 badge, CancellationToken token) =>
             {
-                string response = await badge.GetLargeBadge(id, theme ?? ETheme.Light, token);
+                string response = await badge.GetMediumBadge(id, theme ?? ETheme.Light, token);
                 return Results.Content(response, "image/svg+xml");
             });
 
