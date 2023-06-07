@@ -7,6 +7,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IBadgeV1, BadgeCreatorV1>();
 builder.Services.AddResponseCaching();
 
+builder.WebHost.UseUrls("http://0.0.0.0:5000");
+
 var app = builder.Build();
 
 app.MapBadgeEndpoints();
