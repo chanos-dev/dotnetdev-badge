@@ -126,7 +126,7 @@ namespace DotNetDevBadgeWeb.Core
             string trustColor = Palette.GetTrustColor(trustLv);
 
             string svg = $@"
-<svg width=""230"" height=""60"" viewBox=""0 0 230 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg""
+<svg width=""193"" height=""60"" viewBox=""0 0 193 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg""
     xmlns:xlink=""http://www.w3.org/1999/xlink"">
     <style>
         .text {{
