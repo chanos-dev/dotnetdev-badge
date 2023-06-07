@@ -5,7 +5,7 @@
 
 - 사용모습
 
-  ![dotnetdev profile](./Assets/using.png){: height="450"} 
+  ![dotnetdev profile](./assets/using.png){: height="450"} 
 
 ### ⭐ badge 사용:
 
@@ -22,7 +22,7 @@ https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={id}&theme={Light,Dark,
 | `id` | - | 닷넷데브 포럼 `사용자 이름` |
 | `theme` | `Light` | 뱃지 테마 (`Light`, `Dark`, `Dotnet`) |
 
-![dotnetdev profile](./Assets/small-badge.png){: height="112.5"} 
+![dotnetdev profile](./assets/small-badge.png){: height="112.5"} 
 
 - 사용
 
@@ -40,7 +40,7 @@ https://profile.dotnetdev-badge.kr/api/v1/badge/medium?id={id}&theme={Light,Dark
 | `id` | - | 닷넷데브 포럼 `사용자 이름` |
 | `theme` | `Light` | 뱃지 테마 (`Light`, `Dark`, `Dotnet`) |
 
-![dotnetdev profile](./Assets/medium-badge.png){: height="313.5"}
+![dotnetdev profile](./assets/medium-badge.png){: height="313.5"}
 
 - 사용
 
