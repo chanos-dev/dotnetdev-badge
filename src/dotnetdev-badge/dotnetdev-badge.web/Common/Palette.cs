@@ -16,12 +16,11 @@
 
         public static ColorSet GetColorSet(ETheme theme) => _colorSets[theme];
 
-        public static string GetTrustColor(string trust) => trust switch
+        public static string GetTrustColor(ELevel level) => level switch
         {
-            "1" => "CD7F32",
-            "2" => "CD7F32",
-            "3" => "C0C0C0",
-            "4" => "E7C300",
+            ELevel.Bronze => "CD7F32",
+            ELevel.Silver => "C0C0C0",
+            ELevel.Gold => "E7C300",
             _ => "CD7F32",
         };
     }

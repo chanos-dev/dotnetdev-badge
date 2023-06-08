@@ -1,52 +1,24 @@
 ﻿using DotNetDevBadgeWeb.Common;
-using Newtonsoft.Json.Linq;
+using DotNetDevBadgeWeb.Interfaces;
+using DotNetDevBadgeWeb.Model;
 
 namespace DotNetDevBadgeWeb.Core
 {
     internal class BadgeCreatorV1 : IBadgeV1
-    {
-        private const int AVATAR_SIZE = 128;
-        private const string UNKOWN_IMG_PATH = "Assets/unknown.png";
-        private const string BASE_URL = "https://forum.dotnetdev.kr";
-        private const string BADGE_URL = "https://forum.dotnetdev.kr/user-badges/{0}.json?grouped=true";
-        private const string SUMMARY_URL = "https://forum.dotnetdev.kr/u/{0}/summary.json"; 
+    { 
+        private readonly IProvider _forumProvider;
 
-        private IHttpClientFactory _httpClientFactory;
-
-        public BadgeCreatorV1(IHttpClientFactory httpClientFactory)
+        public BadgeCreatorV1(IProvider forumProvider)
         {
-            _httpClientFactory = httpClientFactory;
-        }
-
-        private async Task<string> GetResponseStringAsync(Uri uri, CancellationToken token)
-        {
-            using HttpClient client = _httpClientFactory.CreateClient();
-
-            using HttpResponseMessage response = await client.GetAsync(uri, token);
-
-            return await response.Content.ReadAsStringAsync(token);
-        }
-
-        private async Task<byte[]> GetResponseBytesAsync(Uri uri, CancellationToken token)
-        {
-            using HttpClient client = _httpClientFactory.CreateClient();
-
-            using HttpResponseMessage response = await client.GetAsync(uri, token);
-
-            return await response.Content.ReadAsByteArrayAsync(token);
+            _forumProvider = forumProvider;
         }
 
         public async Task<string> GetSmallBadge(string id, ETheme theme, CancellationToken token)
         {
-            Uri uri = new(string.Format(SUMMARY_URL, id));
-            string data = await GetResponseStringAsync(uri, token);
-            JObject json = JObject.Parse(data); 
-
-            string heart = json["user_summary"]?["likes_received"]?.ToString() ?? "0";
-            string trustLv = json["users"]?.Where(t => t["id"]?.ToString() != "-1").FirstOrDefault()?["trust_level"]?.ToString() ?? string.Empty;
+            (UserSummary summary, User user) = await _forumProvider.GetUserInfoAsync(id, token);
 
             ColorSet colorSet = Palette.GetColorSet(theme);
-            string trustColor =  Palette.GetTrustColor(trustLv);
+            string trustColor = Palette.GetTrustColor(user.Level);
 
             string svg = $@"
 <svg width=""110"" height=""20"" viewBox=""0 0 110 20"" fill=""none"" xmlns=""http://www.w3.org/2000/svg""
@@ -72,7 +44,7 @@ namespace DotNetDevBadgeWeb.Core
             d=""M37.0711 4.79317C37.5874 4.7052 38.1168 4.73422 38.6204 4.87808C39.124 5.02195 39.5888 5.27699 39.9807 5.62442L40.0023 5.64367L40.0222 5.62617C40.3962 5.29792 40.8359 5.05321 41.312 4.90836C41.7881 4.76352 42.2896 4.72186 42.7831 4.78617L42.9266 4.80717C43.5486 4.91456 44.13 5.18817 44.6092 5.59902C45.0884 6.00987 45.4476 6.54267 45.6487 7.14099C45.8498 7.73931 45.8853 8.38088 45.7516 8.99776C45.6178 9.61464 45.3198 10.1839 44.8889 10.6452L44.7839 10.7531L44.7559 10.777L40.4101 15.0814C40.3098 15.1807 40.1769 15.2402 40.0361 15.249C39.8953 15.2578 39.756 15.2153 39.6442 15.1292L39.5893 15.0814L35.2184 10.7519C34.7554 10.3014 34.4261 9.73148 34.267 9.10532C34.1079 8.47917 34.1252 7.82119 34.317 7.20427C34.5088 6.58734 34.8676 6.03555 35.3537 5.60999C35.8398 5.18443 36.4342 4.90172 37.0711 4.79317Z""
             fill=""#FA6C8D"" />
     </g> 
-    <text class=""text"" x=""49"" y=""14.5"" >{heart}</text>  
+    <text class=""text"" x=""49"" y=""14.5"" >{summary.LikesReceived}</text>  
     <rect x=""88"" y=""1"" width=""18"" height=""18"" fill=""url(#pattern0)"" />
     <defs>
         <pattern id=""pattern0"" patternContentUnits=""objectBoundingBox"" width=""1"" height=""1"">
@@ -88,41 +60,11 @@ namespace DotNetDevBadgeWeb.Core
 
         public async Task<string> GetMediumBadge(string id, ETheme theme, CancellationToken token)
         {
-            Uri badgeUri = new(string.Format(BADGE_URL, id));
-            string badgeData = await GetResponseStringAsync(badgeUri, token);
-            JObject badgeJson = JObject.Parse(badgeData);
-
-            var badges = badgeJson["badges"]?.GroupBy(badge => badge["badge_type_id"]?.ToString() ?? string.Empty).Select(g => new
-            {
-                Type = g.Key,
-                Count = g.Count(),
-            }).ToDictionary(kv => kv.Type, kv => kv.Count);
-
-            int gold = default;
-            int silver = default;
-            int bronze = default;
-
-            if (badges is not null)
-            {
-                gold = badges.ContainsKey("1") ? badges["1"] : 0;
-                silver = badges.ContainsKey("2") ? badges["2"] : 0;
-                bronze = badges.ContainsKey("3") ? badges["3"] : 0;
-            }
-
-            Uri summaryUri = new(string.Format(SUMMARY_URL, id));
-            string summaryData = await GetResponseStringAsync(summaryUri, token);
-            JObject summaryJson = JObject.Parse(summaryData);
-
-            string avatarEndpoint = summaryJson["users"]?.Where(t => t["id"]?.ToString() != "-1").FirstOrDefault()?["avatar_template"]?.ToString() ?? string.Empty;
-            Uri avatarUri = new(string.Concat(BASE_URL, avatarEndpoint.Replace("{size}", AVATAR_SIZE.ToString())));
-            
-            byte[] avatar = string.IsNullOrEmpty(avatarEndpoint) ? await File.ReadAllBytesAsync(UNKOWN_IMG_PATH, token) : await GetResponseBytesAsync(avatarUri, token);
-
-            string heart = summaryJson["user_summary"]?["likes_received"]?.ToString() ?? "0";
-            string trustLv = summaryJson["users"]?.Where(t => t["id"]?.ToString() != "-1").FirstOrDefault()?["trust_level"]?.ToString() ?? string.Empty;
+            (byte[] avatar, UserSummary summary, User user) = await _forumProvider.GetUserInfoWithAvatarAsync(id, token);
+            (int gold, int silver, int bronze) = await _forumProvider.GetBadgeCountAsync(id, token); 
 
             ColorSet colorSet = Palette.GetColorSet(theme);
-            string trustColor = Palette.GetTrustColor(trustLv);
+            string trustColor = Palette.GetTrustColor(user.Level);
 
             string svg = $@"
 <svg width=""193"" height=""60"" viewBox=""0 0 193 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"">
@@ -156,7 +98,7 @@ namespace DotNetDevBadgeWeb.Core
 	</g> 
     
 	<g id=""heart_group"" class=""anime"" style=""animation-delay: 400ms"">
-		<text id=""heart_text"" class=""text"" x=""75.5"" y=""33.5"">{heart}</text>
+		<text id=""heart_text"" class=""text"" x=""75.5"" y=""33.5"">{summary.LikesReceived}</text>
 		<path id=""heart_shape"" 
             d=""M64.4895 25.537C64.932 25.4616 65.3858 25.4865 65.8175 25.6098C66.2491 25.7331 66.6476 25.9517 66.9835 26.2495L67.002 26.266L67.019 26.251C67.3396 25.9697 67.7165 25.7599 68.1246 25.6357C68.5327 25.5116 68.9625 25.4759 69.3855 25.531L69.5085 25.549C70.0417 25.6411 70.54 25.8756 70.9507 26.2277C71.3615 26.5799 71.6693 27.0366 71.8417 27.5494C72.0141 28.0623 72.0446 28.6122 71.93 29.1409C71.8153 29.6697 71.5598 30.1576 71.1905 30.553L71.1005 30.6455L71.0765 30.666L67.3515 34.3555C67.2655 34.4406 67.1517 34.4916 67.0309 34.4992C66.9102 34.5067 66.7909 34.4702 66.695 34.3965L66.648 34.3555L62.9015 30.6445C62.5046 30.2583 62.2224 29.7698 62.086 29.2331C61.9496 28.6964 61.9645 28.1325 62.1289 27.6037C62.2933 27.0749 62.6008 26.6019 63.0175 26.2371C63.4341 25.8724 63.9436 25.6301 64.4895 25.537Z""
 			fill=""#FA6C8D"" />

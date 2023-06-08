@@ -1,6 +1,13 @@
 ﻿namespace DotNetDevBadgeWeb.Common
 {
-    internal enum ETheme
+    public enum ELevel
+    {
+        Bronze,
+        Silver,
+        Gold,
+    }
+
+    public enum ETheme
     {
         Light,
         Dark,

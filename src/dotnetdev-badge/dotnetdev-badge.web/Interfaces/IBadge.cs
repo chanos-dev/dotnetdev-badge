@@ -1,14 +1,14 @@
 ﻿using DotNetDevBadgeWeb.Common;
 
-namespace DotNetDevBadgeWeb.Core
+namespace DotNetDevBadgeWeb.Interfaces
 {
-    internal interface IBadge
+    public interface IBadge
     {
         Task<string> GetSmallBadge(string id, ETheme theme, CancellationToken token);
         Task<string> GetMediumBadge(string id, ETheme theme, CancellationToken token);
     }
 
-    internal interface IBadgeV1 : IBadge
+    public interface IBadgeV1 : IBadge
     {
 
     }

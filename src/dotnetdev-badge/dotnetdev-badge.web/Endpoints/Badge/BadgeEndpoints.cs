@@ -1,6 +1,6 @@
 ﻿using DotNetDevBadgeWeb.Common;
-using DotNetDevBadgeWeb.Core;
 using DotNetDevBadgeWeb.Extensions;
+using DotNetDevBadgeWeb.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetDevBadgeWeb.Endpoints.BadgeEndPoints
