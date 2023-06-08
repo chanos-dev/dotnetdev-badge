@@ -11,7 +11,7 @@
 
 #### ✔ small badge:
 
-##### v1
+##### v1 
 ```
 https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={id}&theme={Light,Dark,Dotnet}
 ```
@@ -24,9 +24,15 @@ https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={id}&theme={Light,Dark,
 
 ![dotnetdev profile](./assets/small-badge.png)
 
-- 사용
+<details>
+<summary>샘플</summary>
 
-  [![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+```
+[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+```
+[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+
+</details>   
 
 #### ✔ medium badge:
 ##### v1
@@ -42,6 +48,12 @@ https://profile.dotnetdev-badge.kr/api/v1/badge/medium?id={id}&theme={Light,Dark
 
 ![dotnetdev profile](./assets/medium-badge.png)
 
-- 사용
+<details>
+<summary>샘플</summary>
 
-  [![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/medium?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+```
+[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/medium?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+```
+[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/medium?id=chanos-dev&theme=Dark)](https://forum.dotnetdev.kr/u/chanos-dev/summary)
+
+</details>
