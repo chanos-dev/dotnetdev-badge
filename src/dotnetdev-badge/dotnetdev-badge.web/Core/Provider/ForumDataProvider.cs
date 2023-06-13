@@ -3,7 +3,7 @@ using DotNetDevBadgeWeb.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace DotNetDevBadgeWeb.Core
+namespace DotNetDevBadgeWeb.Core.Provider
 {
     internal class ForumDataProvider : IProvider
     {
