@@ -2,15 +2,22 @@
 using DotNetDevBadgeWeb.Interfaces;
 using DotNetDevBadgeWeb.Model;
 
-namespace DotNetDevBadgeWeb.Core
+namespace DotNetDevBadgeWeb.Core.Badge
 {
     internal class BadgeCreatorV1 : IBadgeV1
-    { 
-        private readonly IProvider _forumProvider;
+    {
+        private const float MAX_WIDTH = 193f;        
+        private const float LOGO_X = 164.5f;
+        private const float TEXT_X = 75.5f;
+        private const float TEXT_MAX_WIDTH = LOGO_X - TEXT_X - 10;
 
-        public BadgeCreatorV1(IProvider forumProvider)
+        private readonly IProvider _forumProvider;
+        private readonly IMeasureTextV1 _measureTextV1;
+
+        public BadgeCreatorV1(IProvider forumProvider, IMeasureTextV1 measureTextV1)
         {
             _forumProvider = forumProvider;
+            _measureTextV1 = measureTextV1;
         }
 
         public async Task<string> GetSmallBadge(string id, ETheme theme, CancellationToken token)
@@ -61,13 +68,25 @@ namespace DotNetDevBadgeWeb.Core
         public async Task<string> GetMediumBadge(string id, ETheme theme, CancellationToken token)
         {
             (byte[] avatar, UserSummary summary, User user) = await _forumProvider.GetUserInfoWithAvatarAsync(id, token);
-            (int gold, int silver, int bronze) = await _forumProvider.GetBadgeCountAsync(id, token); 
+            (int gold, int silver, int bronze) = await _forumProvider.GetBadgeCountAsync(id, token);
 
             ColorSet colorSet = Palette.GetColorSet(theme);
             string trustColor = Palette.GetTrustColor(user.Level);
 
+            float width = MAX_WIDTH;
+            float logoX = LOGO_X;
+
+            if (_measureTextV1.IsMediumIdWidthGreater(id, out float idWidth))
+            {
+                if (idWidth > TEXT_MAX_WIDTH)
+                {
+                    width += idWidth - TEXT_MAX_WIDTH;
+                    logoX += idWidth - TEXT_MAX_WIDTH;
+                } 
+            }
+
             string svg = $@"
-<svg width=""193"" height=""60"" viewBox=""0 0 193 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"">
+<svg width=""{width}"" height=""60"" viewBox=""0 0 {width} 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"">
     <style>
         .text {{
             font: 800 10px 'Segoe UI';
@@ -88,7 +107,7 @@ namespace DotNetDevBadgeWeb.Core
 		}}
         
     </style>
-    <path d=""M1 1H192V59H1V1Z"" fill=""#{colorSet.BackgroundColor}"" stroke=""#4D1877"" stroke-width=""2"" />
+    <path d=""M1 1H{width - 1}V59H1V1Z"" fill=""#{colorSet.BackgroundColor}"" stroke=""#4D1877"" stroke-width=""2"" />
 
     <g id=""name_group"" class=""anime"" style=""animation-delay: 200ms"">
         <text id=""name_text"" class=""text"" x=""75.5"" y=""16.5"">{id}</text>
@@ -121,7 +140,7 @@ namespace DotNetDevBadgeWeb.Core
             fill=""#CD7F32"" /> 
 	</g> 
 	
-    <rect class=""anime"" x=""164.5"" y=""3"" width=""25"" height=""25"" rx=""12.5"" fill=""url(#pattern_logo)"" />   
+    <rect class=""anime"" x=""{logoX}"" y=""3"" width=""25"" height=""25"" rx=""12.5"" fill=""url(#pattern_logo)"" />   
     <rect class=""anime"" x=""7"" y=""6"" width=""48"" height=""48"" rx=""24"" fill=""url(#pattern_profile)"" />
 	
     <defs> 
@@ -140,6 +159,6 @@ namespace DotNetDevBadgeWeb.Core
 </svg>";
 
             return svg;
-        } 
+        }
     }
 }
