@@ -32,7 +32,7 @@ namespace DotNetDevBadgeWeb.Core.Badge
     xmlns:xlink=""http://www.w3.org/1999/xlink"">
     <style>  
         .text {{
-            font: 800 12px 'Segoe UI';
+            font: 800 12px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #{colorSet.FontColor};
         }}  
     </style>
@@ -92,7 +92,7 @@ namespace DotNetDevBadgeWeb.Core.Badge
 <svg width=""{width}"" height=""60"" viewBox=""0 0 {width} 60"" fill=""none"" xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"">
     <style>
         .text {{
-            font: 800 10px 'Segoe UI';
+            font: 800 10px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #{colorSet.FontColor};
         }}
         .anime {{
