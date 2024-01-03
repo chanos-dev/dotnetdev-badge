@@ -3,61 +3,96 @@
 
 <MudGrid>
     <MudItem xs="6">
-        <MudTextField @bind-Value="Id" Label="DotnetDev ID" Variant="Variant.Text"></MudTextField>
-        <MudField Label="Badge Size" Variant="Variant.Text" InnerPadding="false">
-            <MudRadioGroup @bind-Value="Size">
-                <MudRadio Value="@("Small")">Small</MudRadio>
-                <MudRadio Value="@("Medium")">Medium</MudRadio>
-            </MudRadioGroup>
-        </MudField>
-        <MudField Label="Badge Theme" Variant="Variant.Text" InnerPadding="false">
-            <MudRadioGroup @bind-Value="Theme">
+        <MudTextField @bind-Value="_id" Counter="20" MaxLength="20" Immediate="true" Label=".NET Dev ID" Variant="Variant.Outlined" Clearable="true" />
+    </MudItem>
+    <MudItem xs="6">
+        <MudField Label="Badge Theme" Variant="Variant.Text" InnerPadding="false" DisableUnderLine="true">
+            <MudRadioGroup @bind-Value="_theme">
                 <MudRadio Value="@("Light")">Light</MudRadio>
                 <MudRadio Value="@("Dark")">Dark</MudRadio>
                 <MudRadio Value="@("Dotnet")">Dotnet</MudRadio>
             </MudRadioGroup>
         </MudField>
-        <br/>
-        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Badge" Color="Color.Primary" @onclick=SendClick>Generate</MudButton>
-
-        @if (IsAlert)
-        {
-            <MudAlert Severity="Severity.Warning">DotnetDev ID is Empty.</MudAlert>
-        }
     </MudItem>
-    <MudItem xs="6">        
-        @if (!string.IsNullOrEmpty(URL))
+    <MudItem xs="12">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick=OnGenerateBadge>Generate</MudButton>
+
+        @if (_hasValidation)
         {
-            <MudImage Fluid="true" Src=@URL />
+            <MudAlert Severity="Severity.Warning" Class="mt-3">.NET Dev ID is Empty.</MudAlert>
         }
     </MudItem>
 </MudGrid>
 
+<MudGrid Class="mt-5">
+    @if (_badges is not null && _badges.Count > 0)
+    {
+        @foreach(Badge badge in _badges)
+        {
+            <MudItem xs="12">
+                <MudText Typo="Typo.h5"><b>@badge.Size.ToUpper()</b></MudText>
+                <MudGrid Class="mt-5">
+                    <MudItem xs="4">
+                        <MudImage Src="@badge.URL" />
+                    </MudItem>
+                    <MudItem xs="8">
+                        <MudExpansionPanels MultiExpansion="true">
+                            <MudExpansionPanel Text="HTML" MaxHeight="150">
+                                <pre>
+                                    <code>@badge.HTML</code>
+                                </pre>
+                            </MudExpansionPanel>
+                            <MudExpansionPanel Text="MarkDown" MaxHeight="500">
+                                <pre>
+                                    <code>@badge.Markdown</code>
+                                </pre>
+                            </MudExpansionPanel>
+                        </MudExpansionPanels> 
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        }        
+    } 
+</MudGrid>
+
 @code
 {
-    public string Id { get; set; }
+    private record Badge(string URL, string HTML, string Markdown, string Size);
 
-    public string Theme { get; set; }
+    private string _id = string.Empty;
 
-    public string Size { get; set; }
+    private string _theme = "Light";
 
-    public bool IsAlert { get; set; } = false;
+    private List<Badge>? _badges;
 
-    public string URL { get; set; }
+    private string[] _sizes = new[] { "small", "medium" };
 
-    public async void SendClick(MouseEventArgs e)
+    private bool _hasValidation = false;
+
+    private void OnGenerateBadge(MouseEventArgs e)
     {
-        if (string.IsNullOrEmpty(Id))
+        if (string.IsNullOrEmpty(_id))
         {
-            IsAlert = true;
-            URL = string.Empty;
+            _hasValidation = true;
             return;
         }
 
-        URL = $"https://profile.dotnetdev-badge.kr/api/v1/badge/{Size}?id={Id}&theme={Theme}";
+        _badges = new List<Badge>(_sizes.Length);
 
-        Console.WriteLine(URL);
+        foreach (var size in _sizes)
+        {
+            string url = $"https://profile.dotnetdev-badge.kr/api/v1/badge/{size}?id={_id}&theme={_theme}";
 
-        IsAlert = false;
+            string html = $@"
+<a href=""https://forum.dotnetdev.kr/u/{_id}/summary"">
+    <img src=""https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme}"" />
+</a>
+";
+            string markdown = $"[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme})](https://forum.dotnetdev.kr/u/{_id}/summary)";
+
+            _badges.Add(new(url, html, markdown, size));
+        }
+
+        _hasValidation = false;
     }
 }
