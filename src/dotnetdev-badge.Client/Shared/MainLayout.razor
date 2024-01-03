@@ -1,0 +1,16 @@
+﻿@using MudBlazor
+@inherits LayoutComponentBase
+
+<MudAppBar Color="Color.Primary" Fixed="false">
+    <MudText>
+        dotnetdev-badge
+    </MudText>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Href="https://github.com/chanos-dev/dotnetdev-badge" Target="_blank" />
+</MudAppBar>
+
+<MudMainContent>
+    <MudContainer MaxWidth="MaxWidth.Large">
+        @Body
+    </MudContainer>
+</MudMainContent>

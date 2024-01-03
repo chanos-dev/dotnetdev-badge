@@ -1,0 +1,63 @@
+﻿@page "/"
+@using MudBlazor
+
+<MudGrid>
+    <MudItem xs="6">
+        <MudTextField @bind-Value="Id" Label="DotnetDev ID" Variant="Variant.Text"></MudTextField>
+        <MudField Label="Badge Size" Variant="Variant.Text" InnerPadding="false">
+            <MudRadioGroup @bind-Value="Size">
+                <MudRadio Value="@("Small")">Small</MudRadio>
+                <MudRadio Value="@("Medium")">Medium</MudRadio>
+            </MudRadioGroup>
+        </MudField>
+        <MudField Label="Badge Theme" Variant="Variant.Text" InnerPadding="false">
+            <MudRadioGroup @bind-Value="Theme">
+                <MudRadio Value="@("Light")">Light</MudRadio>
+                <MudRadio Value="@("Dark")">Dark</MudRadio>
+                <MudRadio Value="@("Dotnet")">Dotnet</MudRadio>
+            </MudRadioGroup>
+        </MudField>
+        <br/>
+        <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Badge" Color="Color.Primary" @onclick=SendClick>Generate</MudButton>
+
+        @if (IsAlert)
+        {
+            <MudAlert Severity="Severity.Warning">DotnetDev ID is Empty.</MudAlert>
+        }
+    </MudItem>
+    <MudItem xs="6">        
+        @if (!string.IsNullOrEmpty(URL))
+        {
+            <MudImage Fluid="true" Src=@URL />
+        }
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    public string Id { get; set; }
+
+    public string Theme { get; set; }
+
+    public string Size { get; set; }
+
+    public bool IsAlert { get; set; } = false;
+
+    public string URL { get; set; }
+
+    public async void SendClick(MouseEventArgs e)
+    {
+        if (string.IsNullOrEmpty(Id))
+        {
+            IsAlert = true;
+            URL = string.Empty;
+            return;
+        }
+
+        URL = $"https://profile.dotnetdev-badge.kr/api/v1/badge/{Size}?id={Id}&theme={Theme}";
+
+        Console.WriteLine(URL);
+
+        IsAlert = false;
+    }
+}
