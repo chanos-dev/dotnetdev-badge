@@ -75,9 +75,9 @@
             string url = $"https://profile.dotnetdev-badge.kr/api/v1/badge/{size}?id={_id}&theme={_theme}";
 
             string html = $@"<a href=""https://forum.dotnetdev.kr/u/{_id}/summary"">
-    <img src=""https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme}"" />
+    <img src=""https://profile.dotnetdev-badge.kr/api/v1/badge/{size}?id={_id}&theme={_theme}"" />
 </a>";
-            string markdown = $"[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme})](https://forum.dotnetdev.kr/u/{_id}/summary)";
+            string markdown = $"[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/{size}?id={_id}&theme={_theme})](https://forum.dotnetdev.kr/u/{_id}/summary)";
 
             _badges.Add(new(url, html, markdown, size));
         }

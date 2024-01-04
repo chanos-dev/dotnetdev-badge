@@ -1,14 +1,15 @@
 ﻿@using MudBlazor
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
+@inject IJSRuntime JSRuntime
 
 <MudAppBar Color="Color.Primary" Fixed="false">
     <MudIcon Icon="@Icons.Material.TwoTone.Badge" />
     <MudText Typo="Typo.h6" Class="ml-4 mr-4 pt-1 pb-2" >.NET Dev Badge</MudText>
-    <MudButton Color="Color.Inherit" Href="/" StartIcon="@GetActiveIcon(string.Empty)">
+    <MudButton Color="Color.Inherit" Href="@($"{_basePath}")" StartIcon="@GetActiveIcon(string.Empty)">
         <MudText>Profile Badge</MudText>
     </MudButton>
-    <MudButton Color="Color.Inherit" Href="/guide" StartIcon="@GetActiveIcon("guide")">
+    <MudButton Color="Color.Inherit" Href="@($"{_basePath}guide")" StartIcon="@GetActiveIcon("guide")">
         <MudText>Guide</MudText>
     </MudButton>
     <MudSpacer />        
@@ -31,6 +32,13 @@
 @code {
     private MudTheme _theme = new();
     private bool _isDarkMode;
+    private string _basePath;
+
+    protected async override Task OnInitializedAsync()
+    {
+        // for github hosting
+        _basePath = await JSRuntime.InvokeAsync<string>("getBaseHref");
+    } 
 
     private string GetActiveIcon(string href)
     {
