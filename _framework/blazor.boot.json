@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "dotnetdev-badge.Client.dll": "sha256-iY6t\/4gpMevy3R+6hRLYLdd8k3UT7ir7mqWUnNH71Rc=",
+      "dotnetdev-badge.Client.dll": "sha256-ztIS\/JuTTzyGWhn0wR\/axmXhWO8T+ZbnhxZNE84vMJE=",
       "Microsoft.AspNetCore.Components.dll": "sha256-\/k9BmA4nS3okVA9EbTfmqv\/mvbt+Ks21T66oI70FYPo=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-I3yIZ2EZBqMURBwFT5C+znprTUFTOAmCRPW2ylCnFJo=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-4pnaV+OReGzKPo2lIPyP23AuZUxuytQpsXiCweQPhng=",
