@@ -34,6 +34,19 @@ a, .btn-link {
     color: red;
 }
 
+#loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+}
+
+#loading span {
+    display: block; 
+    margin: 5px 0; 
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

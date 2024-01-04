@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using MudBlazor
+@using dotnetdev_badge.Client.Components
 
 <MudGrid>
     <MudItem xs="6">
@@ -17,12 +18,12 @@
     <MudItem xs="12">
         <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick=OnGenerateBadge>Generate</MudButton>
 
-        @if (_hasValidation)
+        @if (_hasInvalid)
         {
-            <MudAlert Severity="Severity.Warning" Class="mt-3">.NET Dev ID is Empty.</MudAlert>
+            <MudAlert Severity="Severity.Warning" Class="mt-3">The .NET Dev ID field is required.</MudAlert>
         }
     </MudItem>
-</MudGrid>
+</MudGrid> 
 
 <MudGrid Class="mt-5">
     @if (_badges is not null && _badges.Count > 0)
@@ -36,18 +37,8 @@
                         <MudImage Src="@badge.URL" />
                     </MudItem>
                     <MudItem xs="8">
-                        <MudExpansionPanels MultiExpansion="true">
-                            <MudExpansionPanel Text="HTML" MaxHeight="150">
-                                <pre>
-                                    <code>@badge.HTML</code>
-                                </pre>
-                            </MudExpansionPanel>
-                            <MudExpansionPanel Text="MarkDown" MaxHeight="500">
-                                <pre>
-                                    <code>@badge.Markdown</code>
-                                </pre>
-                            </MudExpansionPanel>
-                        </MudExpansionPanels> 
+                        <CopyCodeField Title="HTML" Code="@badge.HTML" />
+                        <CopyCodeField Title="Markdown" Code="@badge.Markdown" />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -67,13 +58,13 @@
 
     private string[] _sizes = new[] { "small", "medium" };
 
-    private bool _hasValidation = false;
+    private bool _hasInvalid = false;
 
     private void OnGenerateBadge(MouseEventArgs e)
     {
         if (string.IsNullOrEmpty(_id))
         {
-            _hasValidation = true;
+            _hasInvalid = true;
             return;
         }
 
@@ -83,16 +74,14 @@
         {
             string url = $"https://profile.dotnetdev-badge.kr/api/v1/badge/{size}?id={_id}&theme={_theme}";
 
-            string html = $@"
-<a href=""https://forum.dotnetdev.kr/u/{_id}/summary"">
+            string html = $@"<a href=""https://forum.dotnetdev.kr/u/{_id}/summary"">
     <img src=""https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme}"" />
-</a>
-";
+</a>";
             string markdown = $"[![dotnetdev](https://profile.dotnetdev-badge.kr/api/v1/badge/small?id={_id}&theme={_theme})](https://forum.dotnetdev.kr/u/{_id}/summary)";
 
             _badges.Add(new(url, html, markdown, size));
         }
 
-        _hasValidation = false;
+        _hasInvalid = false;
     }
 }
