@@ -4,9 +4,9 @@ namespace DotNetDevBadgeWeb.Extensions
 {
     internal static class HttpResponseExtentions
     {
-        internal static HttpResponse SetCacheControl(this HttpResponse response, double time)
+        internal static HttpResponse SetCacheControl(this HttpResponse response, double seconds)
         {
-            response.Headers.CacheControl = new StringValues($"max-age={time}");
+            response.Headers.CacheControl = new StringValues($"max-age={seconds}");
             return response;
         }
     }

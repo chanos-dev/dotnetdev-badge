@@ -14,6 +14,7 @@
             if (context.Request.Query.ContainsKey("id"))
             {
                 string id = context.Request.Query["id"].ToString();
+
                 if (id.Length > 20)
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;

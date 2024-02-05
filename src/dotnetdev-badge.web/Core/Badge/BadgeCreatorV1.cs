@@ -20,7 +20,7 @@ namespace DotNetDevBadgeWeb.Core.Badge
             _measureTextV1 = measureTextV1;
         }
 
-        public async Task<string> GetSmallBadge(string id, ETheme theme, CancellationToken token)
+        public async Task<string> GetSmallBadgeAsync(string id, ETheme theme, CancellationToken token)
         {
             (UserSummary summary, User user) = await _forumProvider.GetUserInfoAsync(id, token);
 
@@ -68,7 +68,7 @@ namespace DotNetDevBadgeWeb.Core.Badge
             return svg;
         }
 
-        public async Task<string> GetMediumBadge(string id, ETheme theme, CancellationToken token)
+        public async Task<string> GetMediumBadgeAsync(string id, ETheme theme, CancellationToken token)
         {
             (byte[] avatar, UserSummary summary, User user) = await _forumProvider.GetUserInfoWithAvatarAsync(id, token);
             (int gold, int silver, int bronze) = await _forumProvider.GetBadgeCountAsync(id, token);

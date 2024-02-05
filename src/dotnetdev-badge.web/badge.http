@@ -1,0 +1,15 @@
+﻿# prod
+#@Host=https://profile.dotnetdev-badge.kr
+
+# dev
+@Host=http://localhost:5000
+@Id=chanos-dev
+@Theme=Dark
+
+# small
+GET {{Host}}/api/v1/badge/small?id={{Id}}&theme={{Theme}}
+
+###
+
+# medium
+GET {{Host}}/api/v1/badge/medium?id={{Id}}&theme={{Theme}}

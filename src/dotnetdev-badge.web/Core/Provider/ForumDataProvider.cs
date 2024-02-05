@@ -22,7 +22,7 @@ namespace DotNetDevBadgeWeb.Core.Provider
 
         private async Task<string> GetResponseStringAsync(Uri uri, CancellationToken token)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            HttpClient client = _httpClientFactory.CreateClient();
 
             using HttpResponseMessage response = await client.GetAsync(uri, token);
 
@@ -31,7 +31,7 @@ namespace DotNetDevBadgeWeb.Core.Provider
 
         private async Task<byte[]> GetResponseBytesAsync(Uri uri, CancellationToken token)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
+            HttpClient client = _httpClientFactory.CreateClient();
 
             using HttpResponseMessage response = await client.GetAsync(uri, token);
 
