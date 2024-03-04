@@ -7,7 +7,7 @@ namespace DotNetDevBadgeWeb.Core.Provider
 {
     internal class ForumDataProvider : IProvider
     {
-        private const string UNKOWN_IMG_PATH = "Assets/unknown.png";
+        private const string UNKNOWN_IMG_PATH = "Assets/unknown.png";
 
         private const string BASE_URL = "https://forum.dotnetdev.kr";
         private const string BADGE_URL = "https://forum.dotnetdev.kr/user-badges/{0}.json?grouped=true";
@@ -57,7 +57,7 @@ namespace DotNetDevBadgeWeb.Core.Provider
             (UserSummary summary, User user) = await GetUserInfoAsync(id, token);
 
             if (string.IsNullOrEmpty(user.AvatarEndPoint))
-                return (await File.ReadAllBytesAsync(UNKOWN_IMG_PATH, token), summary, user);
+                return (await File.ReadAllBytesAsync(UNKNOWN_IMG_PATH, token), summary, user);
 
             Uri avatarUri = new(string.Concat(BASE_URL, user.AvatarEndPoint));
             return (await GetResponseBytesAsync(avatarUri, token), summary, user);
