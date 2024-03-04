@@ -79,7 +79,9 @@ namespace DotNetDevBadgeWeb.Core.Badge
             float width = MAX_WIDTH;
             float logoX = LOGO_X;
 
-            if (_measureTextV1.IsMediumIdWidthGreater(id, out float idWidth))
+            string forumId = string.IsNullOrEmpty(user.Username) ? id : user.Username;
+
+            if (_measureTextV1.IsMediumIdWidthGreater(forumId, out float idWidth))
             {
                 if (idWidth > TEXT_MAX_WIDTH)
                 {
@@ -113,7 +115,7 @@ namespace DotNetDevBadgeWeb.Core.Badge
     <path d=""M1 1H{width - 1}V59H1V1Z"" fill=""#{colorSet.BackgroundColor}"" stroke=""#4D1877"" stroke-width=""2"" />
 
     <g id=""name-group"" class=""anime"" style=""animation-delay: 200ms"">
-        <text id=""name-text"" class=""text"" x=""75.5"" y=""16.5"">{id}</text>
+        <text id=""name-text"" class=""text"" x=""75.5"" y=""16.5"">{forumId}</text>
 		<path id=""name-shape"" d=""M67 13C68.5781 13 69.8571 11.8809 69.8571 10.5C69.8571 9.11914 68.5781 8 67 8C65.4219 8 64.1429 9.11914 64.1429 10.5C64.1429 11.8809 65.4219 13 67 13ZM69 13.625H68.6272C68.1317 13.8242 67.5804 13.9375 67 13.9375C66.4196 13.9375 65.8705 13.8242 65.3728 13.625H65C63.3437 13.625 62 14.8008 62 16.25V17.0625C62 17.5801 62.4799 18 63.0714 18H70.9286C71.5201 18 72 17.5801 72 17.0625V16.25C72 14.8008 70.6563 13.625 69 13.625Z"" fill=""#{trustColor}"" /> 
 	</g> 
     
