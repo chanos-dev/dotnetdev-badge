@@ -12,16 +12,16 @@ namespace DotNetDevBadgeWeb.Model
         public int Id { get; set; }
 
         [JsonProperty("username")]
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [JsonProperty("avatar_template")]
-        public string AvatarTemplate { get; set; }
+        public string? AvatarTemplate { get; set; }
 
         [JsonProperty("flair_name")]
-        public object FlairName { get; set; }
+        public object? FlairName { get; set; }
 
         [JsonProperty("trust_level")]
         public int TrustLevel { get; set; }
