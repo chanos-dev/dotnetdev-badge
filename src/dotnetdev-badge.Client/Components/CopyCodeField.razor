@@ -18,9 +18,9 @@
 
 @code 
 {
-    [Parameter] public string Title { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
 
-    [Parameter] public string Code { get; set; }
+    [Parameter] public string Code { get; set; } = string.Empty;
 
     private async Task OnCopyToClipboard()
     {

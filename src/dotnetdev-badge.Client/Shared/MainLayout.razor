@@ -26,13 +26,14 @@
 </MudMainContent>
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" />
+<MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 @code {
     private MudTheme _theme = new();
     private bool _isDarkMode;
-    private string _basePath;
+    private string _basePath = string.Empty;
 
     protected async override Task OnInitializedAsync()
     {

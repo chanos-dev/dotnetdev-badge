@@ -1,5 +1,5 @@
 ﻿## 🧷 dotnetdev badge:
-![NET6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![Tag](https://img.shields.io/github/v/tag/chanos-dev/dotnetdev-badge) ![License](https://img.shields.io/github/license/chanos-dev/dotnetdev-badge) ![commit](https://img.shields.io/github/last-commit/chanos-dev/dotnetdev-badge)
+![NET10.0](https://img.shields.io/badge/.NET-10.0-blueviolet) ![Tag](https://img.shields.io/github/v/tag/chanos-dev/dotnetdev-badge) ![License](https://img.shields.io/github/license/chanos-dev/dotnetdev-badge) ![commit](https://img.shields.io/github/last-commit/chanos-dev/dotnetdev-badge)
 - `README.md`를 통해 [닷넷데브 포럼](https://forum.dotnetdev.kr) 프로필을 공유해보세요!
 - 업데이트는 하루로 설정되어 있습니다.
   - `cache-control=max-age=86400`
